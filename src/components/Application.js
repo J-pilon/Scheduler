@@ -5,7 +5,7 @@ import DayList from "components/DayList.js";
 import InterviewerListItem from "components/InterviewerListItem.js";
 import Appointment from "./Appointment";
 import axios from "axios";
-import getAppointmentsForDay from "./helpers/selectors";
+import { getAppointmentsForDay, getInterview } from "./helpers/selectors";
 
 
 export default function Application(props) {
@@ -14,7 +14,7 @@ export default function Application(props) {
     day: "Monday",
     days: [],
     appointments: {},
-    inteviewers: {}
+    interviewers: {}
   })
 
   const setDay = day => setState({ ...state, day });
@@ -34,15 +34,29 @@ export default function Application(props) {
         const daysValues = all[0].data;
         const appointmentValues = all[1].data
         const interviewerValues = all[2].data
-
-        console.log("!!!! ", interviewerValues);
         
-        setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, inteviewers: interviewerValues}))
+        setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
       })
     }, [])
-   
     
-    const dailyAppointments = getAppointmentsForDay(state, state.day);    
+    
+    const appointments = getAppointmentsForDay(state, state.day);  
+
+    // console.log("State ", state.inteviewers);
+
+    const schedule = appointments.map(appointment => {
+
+      let interview = getInterview(state, appointment.interview);
+
+      return (
+        <Appointment 
+          key={appointment.id}
+          id={appointment.id}
+          time={appointment.time}
+          interview={appointment.interview}
+        />
+      )
+    })
 
     return (
       <main className="layout">
@@ -68,7 +82,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         <InterviewerListItem />
-        {dailyAppointments.map(appointment => <Appointment key={appointment.id} {...appointment} />)}
+        {schedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>

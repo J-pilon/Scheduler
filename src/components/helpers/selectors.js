@@ -1,5 +1,5 @@
 
-export default function getAppointmentsForDay(state, day) {
+function getAppointmentsForDay(state, day) {
  
   const days = state.days;
   const currentDay = days.find(item => item.name === day);
@@ -11,3 +11,18 @@ export default function getAppointmentsForDay(state, day) {
 
   return appointments;
 }
+
+function getInterview(state, interview) {
+
+  if(!interview) {
+    return null;
+  }
+  
+  const interviewerId = interview.interviewer;
+  let interviewProfile = state.interviewers[interviewerId];
+  interview.interviewer = interviewProfile;
+
+return interview;
+}
+
+export { getAppointmentsForDay, getInterview };
