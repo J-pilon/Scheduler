@@ -19,7 +19,6 @@ export default function Application(props) {
 
   const setDay = day => setState({ ...state, day });
   
-  
   const daysUrl = `http://localhost:8001/api/days`;
   const appointmentUrl = `http://localhost:8001/api/appointments`;
   const interviewerUrl = `http://localhost:8001/api/interviewers`;
@@ -38,13 +37,35 @@ export default function Application(props) {
         setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
       })
     }, [daysUrl, appointmentUrl, interviewerUrl])
+
+    function bookInterview(id, interview) {
+
+      const appointment = {
+        ...state.appointments[id],
+        interview: { ...interview }
+      };    
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+      // console.log("interview ", interview);
+      return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
+        .then(res => {console.log("res.data ", res.data);
+          setState({...state, appointments});
+        })
+        .catch(err => console.log("ERROR ", err.toJSON()))
+      // I thought this had to be in a useEffect ^^
+    };
     
-    const appointments = getAppointmentsForDay(state, state.day);
     const interviewersForDay = getInterviewersForDay(state, state.day);
+    const appointments = getAppointmentsForDay(state, state.day);
+    console.log("appointments ", appointments);
+
 
     const schedule = appointments.map(appointment => {
-      let interview = getInterview(state, appointment.interview);
 
+      let interview = getInterview(state, appointment.interview);
+      // console.log("appointment ", appointment);
       return (
         <Appointment 
           key={appointment.id}
@@ -56,19 +77,7 @@ export default function Application(props) {
         />)
     });
 
-    function bookInterview(id, interview) {
-      const appointment = {
-        ...state.appointments[id],
-        interview: { ...interview }
-      };    
-
-      const appointments = {
-        ...state.appointments,
-        [id]: appointment
-      };
-
-      setState({...state, appointments});
-    };
+   
 
     return (
       <main className="layout">
