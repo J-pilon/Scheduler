@@ -19,10 +19,10 @@ function getInterview(state, interview) {
   }
   
   const interviewerId = interview.interviewer;
-  let interviewProfile = state.interviewers[interviewerId];
-  interview.interviewer = interviewProfile;
+  let interviewerProfile = state.interviewers[interviewerId];
+  const updatedInterview = {...interview, interviewer: interviewerProfile}
 
-return interview;
+return updatedInterview;
 }
 
 function getInterviewersForDay(state, day) {
@@ -32,10 +32,11 @@ function getInterviewersForDay(state, day) {
   if (!currentDay || state.days.length === 0) {
     return [];
   }
-  const interviewersIds = currentDay.interviewers;
-  const interviewers = interviewersIds.map(id => state.interviewers[id]);
 
-  return interviewers;
+  const interviewersForDayId = currentDay.interviewers;
+  const interviewersForDay = interviewersForDayId.map(id => state.interviewers[id]);
+
+  return interviewersForDay;
 }
 
 export { getAppointmentsForDay, getInterview, getInterviewersForDay };

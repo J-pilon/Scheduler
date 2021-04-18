@@ -5,7 +5,7 @@ import DayList from "components/DayList.js";
 import InterviewerListItem from "components/InterviewerListItem.js";
 import Appointment from "./Appointment";
 import axios from "axios";
-import { getAppointmentsForDay, getInterview } from "./helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "./helpers/selectors";
 
 
 export default function Application(props) {
@@ -37,22 +37,27 @@ export default function Application(props) {
         
         setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
       })
-    }, [])
+    }, [daysUrl, appointmentUrl, interviewerUrl])
     
-    const appointments = getAppointmentsForDay(state, state.day);  
+    const appointments = getAppointmentsForDay(state, state.day);
+    const interviewersForDay = getInterviewersForDay(state, state.day);
 
     const schedule = appointments.map(appointment => {
       let interview = getInterview(state, appointment.interview);
-
       return (
         <Appointment 
           key={appointment.id}
           id={appointment.id}
           time={appointment.time}
-          interview={appointment.interview}
-        />
-      )
-    })
+          interview={interview}
+          interviewers={interviewersForDay}
+          bookInterview={bookInterview}
+        />)
+    });
+
+    function bookInterview(id, interview) {
+      console.log(id, interview);
+    };
 
     return (
       <main className="layout">

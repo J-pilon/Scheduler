@@ -18,6 +18,14 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
+  function save(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };
+    console.log("saving!!! ", interview);
+  }
+
   return (
     <article className="appointment">
       <Header time={props.time}/>
@@ -26,17 +34,19 @@ export default function Appointment(props) {
       <Show
         student={props.interview.student}
         interviewer={props.interview.interviewer}
-        // onEdit={props.onEdit}
-        // onDelete={props.onDelete}
+        onEdit={props.onEdit}
+        onDelete={props.onDelete}
       />
       )}
       {mode === CREATE && (
       <Form 
-      interviewers={props.interview} 
-      // onSave={}
+      interviewers={props.interviewers} 
+      onSave={save}
       onCancel={back}
       />
       )}
     </article>
   )
 }
+
+// question about onSave, onEdit, and onDelete
