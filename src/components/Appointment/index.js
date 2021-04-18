@@ -18,12 +18,16 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
-  function save(name, interviewer) {
+  function save(name, interviewer, id) {
+    const appointmentId = id;
+    // confused about how to input appointment id, so added this ^^
+
     const interview = {
       student: name,
       interviewer
     };
-    console.log("saving!!! ", interview);
+    props.bookInterview(appointmentId, interview)
+    transition(SHOW);
   }
 
   return (
@@ -40,6 +44,7 @@ export default function Appointment(props) {
       )}
       {mode === CREATE && (
       <Form 
+      id={props.id}
       interviewers={props.interviewers} 
       onSave={save}
       onCancel={back}

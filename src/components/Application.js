@@ -44,6 +44,7 @@ export default function Application(props) {
 
     const schedule = appointments.map(appointment => {
       let interview = getInterview(state, appointment.interview);
+
       return (
         <Appointment 
           key={appointment.id}
@@ -56,7 +57,17 @@ export default function Application(props) {
     });
 
     function bookInterview(id, interview) {
-      console.log(id, interview);
+      const appointment = {
+        ...state.appointments[id],
+        interview: { ...interview }
+      };    
+
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+
+      setState({...state, appointments});
     };
 
     return (
