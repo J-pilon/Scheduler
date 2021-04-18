@@ -25,4 +25,17 @@ function getInterview(state, interview) {
 return interview;
 }
 
-export { getAppointmentsForDay, getInterview };
+function getInterviewersForDay(state, day) {
+ 
+  const days = state.days;
+  const currentDay = days.find(item => item.name === day);
+  if (!currentDay || state.days.length === 0) {
+    return [];
+  }
+  const interviewersIds = currentDay.interviewers;
+  const interviewers = interviewersIds.map(id => state.interviewers[id]);
+
+  return interviewers;
+}
+
+export { getAppointmentsForDay, getInterview, getInterviewersForDay };
