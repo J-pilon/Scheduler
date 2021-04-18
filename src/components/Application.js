@@ -39,13 +39,9 @@ export default function Application(props) {
       })
     }, [])
     
-    
     const appointments = getAppointmentsForDay(state, state.day);  
 
-    // console.log("State ", state.inteviewers);
-
     const schedule = appointments.map(appointment => {
-
       let interview = getInterview(state, appointment.interview);
 
       return (
