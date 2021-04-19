@@ -7,12 +7,19 @@ import Empty from "./Empty";
 import useVisualMode from '../../hooks/useVisualMode';
 import Form from "./Form";
 import Status from './Status';
+import Confirm from "./Confirm";
+import Error from "./Error";
 
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
+const CONFIRM = "CONFIRM";
+const DELETING = "DELETING";
+const EDIT = "EDIT";
+const ERROR_SAVING = "ERROR_SAVING";
+const ERROR_DELETING = "ERROR_DELETING";
 
 export default function Appointment(props) {
   
@@ -22,7 +29,6 @@ export default function Appointment(props) {
 
   function save(name, interviewer) {
     const appointmentId = props.id;
-    // confused about how to input appointment id, so added this ^^
 
     const interview = {
       student: name,
@@ -30,10 +36,19 @@ export default function Appointment(props) {
     };
     transition(SAVING);
     props.bookInterview(appointmentId, interview)
-      .then(() => transition(SHOW));
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVING, true))
   }
 
-  console.log("!!!! ", props);
+  function deleting() {
+    transition(DELETING)
+    props.cancelInterview(props.id)
+      .then(() => transition(EMPTY))
+      .catch(error => transition(ERROR_DELETING, true))
+
+  }
+
+  // didnt need to emplement destroy function??? *handling errors assignment*
 
   return (
     <article className="appointment">
@@ -43,8 +58,8 @@ export default function Appointment(props) {
       <Show
         student={props.interview.student}
         interviewer={props.interview.interviewer}
-        onEdit={props.onEdit}
-        onDelete={props.onDelete}
+        onEdit={() => transition(EDIT)}
+        onDelete={() => transition(CONFIRM)}
       />
       )}
       {mode === CREATE && (
@@ -55,11 +70,32 @@ export default function Appointment(props) {
       onCancel={back}
       />
       )}
+      {mode === EDIT && (
+        <Form
+        id={props.id}
+        student={props.interview.student}
+        interviewers={props.interviewers} 
+        interviewer={props.interview.interviewer} 
+        onSave={save}
+        onCancel={back}
+        />
+      )}
       {mode === SAVING && (
-        <Status message="saving"/>
+        <Status message="Saving"/>
+      )}
+      {mode === DELETING && (
+        <Status message="Deleting" />
+      )}
+      {mode === CONFIRM && (
+        <Confirm  onCancel={back} onDelete={deleting} message="Are You Sure You Want To Delete?"/>
+      )}
+      {mode === ERROR_SAVING && (
+        <Error message="error while saving" onClose={back} />
+      )}
+      {mode === ERROR_DELETING && (
+        <Error message="error while deleting" onClose={back} />
       )}
     </article>
   )
 }
 
-// question about onSave, onEdit, and onDelete

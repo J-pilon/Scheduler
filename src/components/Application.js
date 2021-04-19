@@ -1,71 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import "components/Application.scss";
 import DayList from "components/DayList.js";
 import InterviewerListItem from "components/InterviewerListItem.js";
 import Appointment from "./Appointment";
-import axios from "axios";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "./helpers/selectors";
+import useApplicationData from "hooks/useApplicationData";
 
 
 export default function Application(props) {
 
-  const [state, setState ] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  })
-
-  const setDay = day => setState({ ...state, day });
-  
-  const daysUrl = `http://localhost:8001/api/days`;
-  const appointmentUrl = `http://localhost:8001/api/appointments`;
-  const interviewerUrl = `http://localhost:8001/api/interviewers`;
-  
-  useEffect(() => {
-    const daysPromise = axios.get(daysUrl);
-    const appointmentPromise = axios.get(appointmentUrl);
-    const interviewerPromise = axios.get(interviewerUrl);
-
-    Promise.all([daysPromise, appointmentPromise, interviewerPromise])
-      .then(all => {
-        const daysValues = all[0].data;
-        const appointmentValues = all[1].data
-        const interviewerValues = all[2].data
-        
-        setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
-      })
-    }, [daysUrl, appointmentUrl, interviewerUrl])
-
-    function bookInterview(id, interview) {
-
-      const appointment = {
-        ...state.appointments[id],
-        interview: { ...interview }
-      };    
-      const appointments = {
-        ...state.appointments,
-        [id]: appointment
-      };
-      // console.log("interview ", interview);
-      return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
-        .then(res => {console.log("res.data ", res.data);
-          setState({...state, appointments});
-        })
-        .catch(err => console.log("ERROR ", err.toJSON()))
-      // I thought this had to be in a useEffect ^^
-    };
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
+  // how does this work ^^
     
     const interviewersForDay = getInterviewersForDay(state, state.day);
     const appointments = getAppointmentsForDay(state, state.day);
-    console.log("appointments ", appointments);
-
 
     const schedule = appointments.map(appointment => {
 
       let interview = getInterview(state, appointment.interview);
-      // console.log("appointment ", appointment);
       return (
         <Appointment 
           key={appointment.id}
@@ -74,10 +32,11 @@ export default function Application(props) {
           interview={interview}
           interviewers={interviewersForDay}
           bookInterview={bookInterview}
-        />)
+          cancelInterview={cancelInterview}
+          />)
     });
 
-   
+  //  after clicking edit on show the form doesnt have the student name or interviewer selected
 
     return (
       <main className="layout">
