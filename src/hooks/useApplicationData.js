@@ -41,11 +41,27 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+
+    const { emptySpots, dayId } = updateSpots(state, state.day, appointments);
+
+    // console.log("dayId ", dayId);
+    const day = {
+      ...state.days[dayId - 1], 
+      spots: emptySpots
+    };
+    // console.log("the day@@@ ", day);
+
+    const days = [...state.days];
+    days[dayId - 1] = day;
+    
+    
+    console.log("day&&&& ", day);
     return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
       .then(res => {console.log("res.data ", res.data);
-        setState({...state, appointments});
+        setState({...state, appointments, days});
+
       })
-      // .catch(err => console.log("ERROR ", err.toJSON()))
+      .catch(err => console.log("ERROR ", err.toJSON()))
     // I thought this had to be in a useEffect ^^
   };
   
@@ -59,12 +75,40 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+
+    const { emptySpots, dayId } = updateSpots(state, state.day)
+
+    const day = {
+      ...state.days[dayId], 
+      spots: emptySpots
+    };
+    const days = {
+      ...state.days, 
+      [id]: day
+    }
     return axios.delete(`http://localhost:8001/api/appointments/${id}`)
       .then(res => {console.log(res.data);
-      setState({...state, [id]: appointment});
+      setState({...state, appointments, days});
       })
-      // .catch(err => console.log("ERROR ", err.toJSON())) 
+      .catch(err => console.log("ERROR ", err.toJSON())) 
   }
+  // ^^doesnt cause a rerender??
 
   return { state, setDay, bookInterview, cancelInterview }
 };
+
+
+function updateSpots(state, currentDay, dayAppointments) {
+  const days = state.days;
+  
+  const dayObj = days.find(day => day.name === currentDay);
+  
+  const dayId = dayObj.id;
+  const spots = dayObj.appointments.filter(id => dayAppointments[id].interview === null);
+  // const spots = dayObj.appointments.filter(id => console.log("@@@@ ", dayAppointments[id].interview));
+
+  const emptySpots = spots.length;
+  // console.log("emptySpots ", emptySpots);
+
+  return { emptySpots, dayId };
+}
