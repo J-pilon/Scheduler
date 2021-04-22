@@ -9,5 +9,4 @@ describe("Application", () => {
     render(<Application />);
     });
 
-
 })

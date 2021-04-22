@@ -26,7 +26,6 @@ export default function useApplicationData() {
         const daysValues = all[0].data
         const appointmentValues = all[1].data
         const interviewerValues = all[2].data
-         console.log("DAYS *** ", daysValues);
         setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
       })
     }, [daysUrl, appointmentUrl, interviewerUrl])

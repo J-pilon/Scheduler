@@ -55,13 +55,12 @@ const fixtures = {
 
 export default {
   get: jest.fn(url => {
-    console.log("url@@@ ", url);
     if (url.includes("/api/days")) {
       return Promise.resolve({
         status: 200,
         statusText: "OK",
         data: fixtures.days
-      });
+      })
     }
 
     if (url.includes("/api/appointments")) {
@@ -74,10 +73,21 @@ export default {
 
     if (url.includes("/api/interviewers")) {
       return Promise.resolve({
+
         status: 200,
         statusText: "OK",
         data: fixtures.interviewers
       })    
+    }
+  }),
+
+  put: jest.fn(url => {
+
+    if (url.includes("/api/appointments")) {
+      return Promise.resolve({
+        status: 204, 
+        statusText: "No Content" 
+      })
     }
   })
 }
