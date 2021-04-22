@@ -16,7 +16,6 @@ export default function Application(props) {
     bookInterview,
     cancelInterview
   } = useApplicationData();
-  // how does this work ^^
     
     const interviewersForDay = getInterviewersForDay(state, state.day);
     const appointments = getAppointmentsForDay(state, state.day);
@@ -35,8 +34,6 @@ export default function Application(props) {
           cancelInterview={cancelInterview}
           />)
     });
-
-  //  after clicking edit on show the form doesnt have the student name or interviewer selected
 
     return (
       <main className="layout">
