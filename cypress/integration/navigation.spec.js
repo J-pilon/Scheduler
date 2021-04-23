@@ -1,5 +1,6 @@
-describe("Navigation", () => {
 
+
+describe("Navigation", () => {
 
   it("should navigate to Tuesday", () => {
     cy.visit("/");
