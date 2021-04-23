@@ -15,12 +15,13 @@ export default function Form(props) {
     props.onCancel();
   }
 
+  // validates that student entered a name into the input
   function validate() {
+
     if (name === "") {
       setError("Student name cannot be blank");
       return;
     }
-  
     setError("");
     props.onSave(name, interviewer);
   }

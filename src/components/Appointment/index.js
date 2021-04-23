@@ -28,12 +28,13 @@ export default function Appointment(props) {
   );
 
   function save(name, interviewer) {
-    const appointmentId = props.id;
 
+    const appointmentId = props.id;
     const interview = {
       student: name,
       interviewer
     };
+
     transition(SAVING);
     props.bookInterview(appointmentId, interview)
       .then(() => transition(SHOW))
@@ -41,14 +42,13 @@ export default function Appointment(props) {
   }
 
   function deleting() {
+
     transition(DELETING)
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(error => transition(ERROR_DELETING, true))
 
   }
-
-  // didnt need to emplement destroy function??? *handling errors assignment*
 
   return (
     <article className="appointment" data-testid="appointment">

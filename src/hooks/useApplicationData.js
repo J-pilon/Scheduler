@@ -12,14 +12,10 @@ export default function useApplicationData() {
 
   const setDay = day => setState({ ...state, day });
 
-  const daysUrl = `http://localhost:8001/api/days`;
-  const appointmentUrl = `http://localhost:8001/api/appointments`;
-  const interviewerUrl = `http://localhost:8001/api/interviewers`;
-
   useEffect(() => {
-    const daysPromise = axios.get(daysUrl);
-    const appointmentPromise = axios.get(appointmentUrl);
-    const interviewerPromise = axios.get(interviewerUrl);
+    const daysPromise = axios.get(`http://localhost:8001/api/days`);
+    const appointmentPromise = axios.get(`http://localhost:8001/api/appointments`);
+    const interviewerPromise = axios.get(`http://localhost:8001/api/interviewers`);
 
     Promise.all([daysPromise, appointmentPromise, interviewerPromise])
       .then(all => {
@@ -28,7 +24,7 @@ export default function useApplicationData() {
         const interviewerValues = all[2].data
         setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
       })
-    }, [daysUrl, appointmentUrl, interviewerUrl])
+    }, [])
 
   function bookInterview(id, interview) {
 
@@ -88,7 +84,7 @@ export default function useApplicationData() {
   return { state, setDay, bookInterview, cancelInterview }
 };
 
-
+// after an appointment is added or deleted the spots remaining are updated
 function updateSpots(days, currentDay, dayAppointments) {
 
   const dayObj = days.find(day => day.name === currentDay);
