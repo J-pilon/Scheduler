@@ -7,6 +7,7 @@ describe("Application", () => {
  
     it("renders without crashing", () => {
     render(<Application />);
+    
     });
 
 })

@@ -57,7 +57,6 @@ export default function useApplicationData() {
 
       })
       .catch(err => console.log("ERROR ", err.toJSON()))
-    // I thought this had to be in a useEffect ^^
   };
   
   function cancelInterview(id) {
@@ -81,12 +80,11 @@ export default function useApplicationData() {
     days[dayId - 1] = day;
 
     return axios.delete(`http://localhost:8001/api/appointments/${id}`)
-      .then(res => {console.log(res.data);
+      .then(res => {console.log(res);
       setState({...state, appointments, days});
       })
       .catch(err => console.log("ERROR ", err.toJSON())) 
   }
-  // ^^doesnt cause a rerender??
   return { state, setDay, bookInterview, cancelInterview }
 };
 
