@@ -19,11 +19,12 @@ export default function useVisualMode(initial) {
     return;
   }
 
+  // slice method doesnt muttate history array
   const back = () => {
 
     const backHistory = history.slice(0, -1);
     const lastMode = backHistory[backHistory.length - 1]
-
+    
     setMode(lastMode);
     setHistory(backHistory);
     return;

@@ -13,9 +13,9 @@ export default function useApplicationData() {
   const setDay = day => setState({ ...state, day });
 
   useEffect(() => {
-    const daysPromise = axios.get(`http://localhost:8001/api/days`);
-    const appointmentPromise = axios.get(`http://localhost:8001/api/appointments`);
-    const interviewerPromise = axios.get(`http://localhost:8001/api/interviewers`);
+    const daysPromise = axios.get(`/api/days`);
+    const appointmentPromise = axios.get(`/api/appointments`);
+    const interviewerPromise = axios.get(`/api/interviewers`);
 
     Promise.all([daysPromise, appointmentPromise, interviewerPromise])
       .then(all => {
@@ -47,7 +47,7 @@ export default function useApplicationData() {
     const days = [...state.days];
     days[dayId - 1] = day;
     
-        return axios.put(`http://localhost:8001/api/appointments/${id}`, { interview })
+        return axios.put(`/api/appointments/${id}`, { interview })
       .then(res => {console.log("res.data ", res.data);
         setState({...state, appointments, days});
 
@@ -75,7 +75,7 @@ export default function useApplicationData() {
     const days = [...state.days];
     days[dayId - 1] = day;
 
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+    return axios.delete(`/api/appointments/${id}`)
       .then(res => {console.log(res);
       setState({...state, appointments, days});
       })
