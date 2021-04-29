@@ -34,5 +34,14 @@ npm run storybook
 npm run cypress
 ```
 
+# Dependencies
+* axios ^0.21.1
+* classnames ^2.2.6
+* normalize.css ^8.0.1
+* react ^16.9.0
+* react-dom ^16.9.0
+* react-scripts 3.0.0
+
+
 I hope you enjoy!
-email: josiah.pilon@yahoo.ca
+email: josiah.pilon@gmail.com
