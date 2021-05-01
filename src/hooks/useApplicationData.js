@@ -13,18 +13,19 @@ export default function useApplicationData() {
   const setDay = day => setState({ ...state, day });
 
   useEffect(() => {
+
     const daysPromise = axios.get(`/api/days`);
     const appointmentPromise = axios.get(`/api/appointments`);
     const interviewerPromise = axios.get(`/api/interviewers`);
-
+    
     Promise.all([daysPromise, appointmentPromise, interviewerPromise])
-      .then(all => {
-        const daysValues = all[0].data
-        const appointmentValues = all[1].data
-        const interviewerValues = all[2].data
-        setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
-      })
-    }, [])
+    .then(all => {
+      const daysValues = all[0].data
+      const appointmentValues = all[1].data
+      const interviewerValues = all[2].data
+      setState(prev => ({...prev, days: daysValues, appointments: appointmentValues, interviewers: interviewerValues}))
+    })
+  }, [])
 
   function bookInterview(id, interview) {
 
@@ -54,6 +55,7 @@ export default function useApplicationData() {
       })
       .catch(err => console.log("ERROR ", err.toJSON()))
   };
+
   
   function cancelInterview(id) {
 
