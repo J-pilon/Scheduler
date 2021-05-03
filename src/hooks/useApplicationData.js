@@ -51,9 +51,7 @@ export default function useApplicationData() {
         return axios.put(`/api/appointments/${id}`, { interview })
       .then(res => {console.log("res.data ", res.data);
         setState({...state, appointments, days});
-
       })
-      .catch(err => console.log("ERROR ", err.toJSON()))
   };
 
   
@@ -79,9 +77,8 @@ export default function useApplicationData() {
 
     return axios.delete(`/api/appointments/${id}`)
       .then(res => {console.log(res);
-      setState({...state, appointments, days});
+        setState({...state, appointments, days});
       })
-      .catch(err => console.log("ERROR ", err.toJSON())) 
   }
   return { state, setDay, bookInterview, cancelInterview }
 };
