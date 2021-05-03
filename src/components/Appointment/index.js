@@ -40,7 +40,7 @@ export default function Appointment(props) {
       .then(() => transition(SHOW))
       .catch(() => transition(ERROR_SAVING, true))
   }
-
+  
   function deleting() {
 
     transition(DELETING)
@@ -49,7 +49,7 @@ export default function Appointment(props) {
       .catch(() => transition(ERROR_DELETING, true))
 
   };
-
+  
   return (
     <article className="appointment" data-testid="appointment">
       <Header time={props.time}/>
